@@ -43,6 +43,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        let userDefault = UserDefaults.standard
+        let keys = userDefault.dictionaryRepresentation()
+        for key in keys {
+            userDefault.removeObject(forKey: key.key)
+        }
+        userDefault.synchronize()
     }
 
     // MARK: - Split view

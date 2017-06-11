@@ -12,12 +12,15 @@ class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
     var objects = [Any]()
-
+    var dates = [String]()
+    var buatCatatan = UIAlertAction()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.title = "Catatan Keren"
         navigationItem.leftBarButtonItem = editButtonItem
+        self.navigationItem.backBarButtonItem = UIBarButtonItem.init(title: "Back", style: .plain, target: nil, action: nil)
 
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         navigationItem.rightBarButtonItem = addButton
@@ -38,9 +41,38 @@ class MasterViewController: UITableViewController {
     }
 
     func insertNewObject(_ sender: Any) {
-        objects.insert(NSDate(), at: 0)
-        let indexPath = IndexPath(row: 0, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
+        let alertJudul = UIAlertController (title: "Masukkan Judul Catatan", message: "Masukkan judul catatan untuk mempermudah pengorganisasian catatan.", preferredStyle: UIAlertControllerStyle.alert)
+        alertJudul.addTextField(configurationHandler: { textfield in
+            textfield.placeholder = "Judul catatan"
+            NotificationCenter.default.addObserver(self, selector: #selector(self.alertTextFieldHasChanged), name: NSNotification.Name.UITextFieldTextDidChange, object: textfield)
+        })
+        self.buatCatatan = UIAlertAction(title: "Buat Catatan", style: UIAlertActionStyle.default,handler: { (action) in
+            let textfield: UITextField = (alertJudul.textFields?.first!)!
+            let date = Date()
+            let calendar = Calendar.current
+            let currentHour = calendar.component(.hour, from: date)
+            let currentMinutes = calendar.component(.minute, from: date)
+            let currentSeconds = calendar.component(.second, from: date)
+            let currentDate = calendar.component(.day, from: date)
+            let currentMonth = calendar.component(.month, from: date)
+            let currentYear = calendar.component(.year, from: date)
+            
+            if !(textfield.text?.isEmpty)! {
+                self.objects.insert(textfield.text!, at: 0)
+                self.dates.insert("\(currentYear)/\(currentMonth)/\(currentDate) \(currentHour):\(currentMinutes):\(currentSeconds)", at: 0)
+                let indexPath = IndexPath(row: 0, section: 0)
+                self.tableView.insertRows(at: [indexPath], with: .automatic)
+            }
+        })
+        self.buatCatatan.isEnabled = false
+        alertJudul.addAction(buatCatatan)
+        alertJudul.addAction(UIAlertAction(title: "Batalkan", style: UIAlertActionStyle.destructive,handler:nil))
+        self.present(alertJudul, animated: true, completion: nil)
+    }
+    
+    func alertTextFieldHasChanged(notification: Notification){
+        let textfield = notification.object as! UITextField
+        self.buatCatatan.isEnabled = !(textfield.text?.isEmpty)!
     }
 
     // MARK: - Segues
@@ -48,9 +80,10 @@ class MasterViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
-                let object = objects[indexPath.row] as! NSDate
+                let object = objects[indexPath.row] as! String
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
+                controller.masterRow = "baris\(indexPath.row)"
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -70,8 +103,9 @@ class MasterViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        let object = objects[indexPath.row] as! NSDate
+        let object = objects[indexPath.row] as! String
         cell.textLabel!.text = object.description
+        cell.detailTextLabel?.text = dates[indexPath.row]
         return cell
     }
 
