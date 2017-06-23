@@ -135,6 +135,8 @@ class MasterViewController: UITableViewController {
             }
         }
         
+        cell.accessoryType = .disclosureIndicator
+        
         return cell
     }
 
@@ -180,6 +182,8 @@ class MasterViewController: UITableViewController {
     //save to core data
     func saveTitle(title: String, date: String) {
         
+        let content = " "
+        
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {
                 return
@@ -193,6 +197,7 @@ class MasterViewController: UITableViewController {
         
         managedObject.setValue(title, forKeyPath: "title")
         managedObject.setValue(date, forKeyPath: "date")
+        managedObject.setValue(content, forKey: "content")
         
         do {
             try managedContext.save()
@@ -207,7 +212,7 @@ class MasterViewController: UITableViewController {
     //print core data entities
     func printCoreData() {
         for object in objects as! [Notes] {
-            print("\(object.title as Any), \(object.date as Any)")
+            print("\(object.title as Any), \(object.date as Any), \(object.content as Any)")
         }
     }
 
