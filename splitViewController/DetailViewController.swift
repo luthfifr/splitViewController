@@ -13,7 +13,7 @@ class DetailViewController: UIViewController {
 
     @IBOutlet weak var textView: UITextView!
     
-    var masterRow: String?
+    var objects = [NSManagedObject]()
     var detailItem: NSManagedObject?
     let userDefault = UserDefaults.standard
 
@@ -30,19 +30,30 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.title = String(describing: detailItem?.entity.name)
+        self.title = ((detailItem?.value(forKeyPath: "title"))! as! String)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        if (masterRow) != nil {
-            if userDefault.object(forKey: masterRow!) != nil {
-                textView.text = userDefault.string(forKey: masterRow!)
-            } else {
-                textView.text = ""
-            }
-        } else {
-            textView.text = ""
+        
+        if let item = detailItem as? [Notes] {
+            textView.text = item[item.count-1].content!
+        }
+        
+        //fetch from core data
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSManagedObject> (entityName: "Notes")
+        
+        do {
+            objects = try managedContext.fetch(fetchRequest)
+            
+        } catch let error as NSError {
+            print("Could not fetch from Core Data. \(error), \(error.userInfo)")
         }
         
     }
@@ -50,8 +61,8 @@ class DetailViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         
-        userDefault.set(textView.text, forKey: masterRow!)
-        userDefault.synchronize()
+        //userDefault.set(textView.text, forKey: masterRow!)
+        //userDefault.synchronize()
     }
 
     override func didReceiveMemoryWarning() {

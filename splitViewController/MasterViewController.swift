@@ -102,7 +102,6 @@ class MasterViewController: UITableViewController {
                 let object = objects[indexPath.row] 
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
-                controller.masterRow = "baris\(indexPath.row)"
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -121,7 +120,8 @@ class MasterViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
+        
+        //assign core data entity values to UITableView textLabel(s)
         if indexPath.row < objects.count {
             if let object = objects as? [Notes] {
                 if object[indexPath.row].title != nil && object[indexPath.row].date != nil {
@@ -197,7 +197,7 @@ class MasterViewController: UITableViewController {
         
         managedObject.setValue(title, forKeyPath: "title")
         managedObject.setValue(date, forKeyPath: "date")
-        managedObject.setValue(content, forKey: "content")
+        managedObject.setValue(content, forKeyPath: "content")
         
         do {
             try managedContext.save()
