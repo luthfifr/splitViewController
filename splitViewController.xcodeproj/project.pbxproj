@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF8CFA1B1EFBD0C8003435AC /* splitViewController.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CF8CFA191EFBD0C8003435AC /* splitViewController.xcdatamodeld */; };
+		CF8CFA1C1EFBD0C8003435AC /* splitViewController.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CF8CFA191EFBD0C8003435AC /* splitViewController.xcdatamodeld */; };
+		CF8CFA1D1EFBD0C8003435AC /* splitViewController.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CF8CFA191EFBD0C8003435AC /* splitViewController.xcdatamodeld */; };
 		CF95BB171EEDC58F00CEC00C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF95BB161EEDC58F00CEC00C /* AppDelegate.swift */; };
 		CF95BB191EEDC58F00CEC00C /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF95BB181EEDC58F00CEC00C /* MasterViewController.swift */; };
 		CF95BB1B1EEDC58F00CEC00C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF95BB1A1EEDC58F00CEC00C /* DetailViewController.swift */; };
@@ -35,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF8CFA1A1EFBD0C8003435AC /* splitViewController.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = splitViewController.xcdatamodel; sourceTree = "<group>"; };
 		CF95BB131EEDC58F00CEC00C /* splitViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = splitViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF95BB161EEDC58F00CEC00C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF95BB181EEDC58F00CEC00C /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 				CF95BB181EEDC58F00CEC00C /* MasterViewController.swift */,
 				CF95BB1A1EEDC58F00CEC00C /* DetailViewController.swift */,
 				CF95BB1C1EEDC59000CEC00C /* Main.storyboard */,
+				CF8CFA191EFBD0C8003435AC /* splitViewController.xcdatamodeld */,
 				CF95BB1F1EEDC59000CEC00C /* Assets.xcassets */,
 				CF95BB211EEDC59000CEC00C /* LaunchScreen.storyboard */,
 				CF95BB241EEDC59000CEC00C /* Info.plist */,
@@ -268,6 +273,7 @@
 				CF95BB1B1EEDC58F00CEC00C /* DetailViewController.swift in Sources */,
 				CF95BB191EEDC58F00CEC00C /* MasterViewController.swift in Sources */,
 				CF95BB171EEDC58F00CEC00C /* AppDelegate.swift in Sources */,
+				CF8CFA1B1EFBD0C8003435AC /* splitViewController.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF95BB2E1EEDC59000CEC00C /* splitViewControllerTests.swift in Sources */,
+				CF8CFA1C1EFBD0C8003435AC /* splitViewController.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF95BB391EEDC59000CEC00C /* splitViewControllerUITests.swift in Sources */,
+				CF8CFA1D1EFBD0C8003435AC /* splitViewController.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,6 +528,7 @@
 				CF95BB3F1EEDC59000CEC00C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF95BB401EEDC59000CEC00C /* Build configuration list for PBXNativeTarget "splitViewControllerTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +537,7 @@
 				CF95BB421EEDC59000CEC00C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF95BB431EEDC59000CEC00C /* Build configuration list for PBXNativeTarget "splitViewControllerUITests" */ = {
 			isa = XCConfigurationList;
@@ -536,8 +546,22 @@
 				CF95BB451EEDC59000CEC00C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CF8CFA191EFBD0C8003435AC /* splitViewController.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CF8CFA1A1EFBD0C8003435AC /* splitViewController.xcdatamodel */,
+			);
+			currentVersion = CF8CFA1A1EFBD0C8003435AC /* splitViewController.xcdatamodel */;
+			path = splitViewController.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = CF95BB0B1EEDC58F00CEC00C /* Project object */;
 }

@@ -7,18 +7,22 @@
 //
 
 import UIKit
+import CoreData
 
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-    var objects = [Any]()
-    var dates = [String]()
+    var objects = [NSManagedObject]()
+    var dates = [NSManagedObject]()
     var buatCatatan = UIAlertAction()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
         self.title = "Catatan Keren"
+        
+        self.tableView.tableFooterView = UIView()
+        
         navigationItem.leftBarButtonItem = editButtonItem
         self.navigationItem.backBarButtonItem = UIBarButtonItem.init(title: "Back", style: .plain, target: nil, action: nil)
 
@@ -33,6 +37,23 @@ class MasterViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         super.viewWillAppear(animated)
+        
+        //fetch from core data
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSManagedObject> (entityName: "Notes")
+        
+        do {
+            objects = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch from Core Data. \(error), \(error.userInfo)")
+        }
+        
+        printCoreData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,10 +79,8 @@ class MasterViewController: UITableViewController {
             let currentYear = calendar.component(.year, from: date)
             
             if !(textfield.text?.isEmpty)! {
-                self.objects.insert(textfield.text!, at: 0)
-                self.dates.insert("\(currentYear)/\(currentMonth)/\(currentDate) \(currentHour):\(currentMinutes):\(currentSeconds)", at: 0)
-                let indexPath = IndexPath(row: 0, section: 0)
-                self.tableView.insertRows(at: [indexPath], with: .automatic)
+                self.saveTitle(title: textfield.text!, date: "\(currentYear)/\(currentMonth)/\(currentDate) \(currentHour):\(currentMinutes):\(currentSeconds)")
+                self.tableView.reloadData()
             }
         })
         self.buatCatatan.isEnabled = false
@@ -80,7 +99,7 @@ class MasterViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
-                let object = objects[indexPath.row] as! String
+                let object = objects[indexPath.row] 
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
                 controller.masterRow = "baris\(indexPath.row)"
@@ -103,9 +122,19 @@ class MasterViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        let object = objects[indexPath.row] as! String
-        cell.textLabel!.text = object.description
-        cell.detailTextLabel?.text = dates[indexPath.row]
+        if indexPath.row < objects.count {
+            if let object = objects as? [Notes] {
+                if object[indexPath.row].title != nil && object[indexPath.row].date != nil {
+                    cell.textLabel!.text = object[indexPath.row].title!
+                    cell.detailTextLabel?.text = object[indexPath.row].date!
+                } else {
+                    cell.textLabel!.text = object[indexPath.row].title
+                    cell.detailTextLabel?.text = object[indexPath.row].date
+                }
+                
+            }
+        }
+        
         return cell
     }
 
@@ -116,13 +145,71 @@ class MasterViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            objects.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            //delete a core data object
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                return
+            }
+            
+            let managedContext = appDelegate.persistentContainer.viewContext
+            
+            let fetchRequest = NSFetchRequest<NSManagedObject> (entityName: "Notes")
+            
+            do {
+                let object = try managedContext.fetch(fetchRequest)
+                managedContext.delete(object[indexPath.row])
+                try managedContext.save()
+            } catch let error as NSError {
+                print("Could not delete from Core Data. \(error), \(error.userInfo)")
+            }
+            
+            do {
+                objects.removeAll()
+                objects = try managedContext.fetch(fetchRequest)
+            } catch let error as NSError {
+                print("Could not fetch from Core Data. \(error), \(error.userInfo)")
+            }
+            
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
+        
+        self.tableView.reloadData()
     }
-
+    
+    //save to core data
+    func saveTitle(title: String, date: String) {
+        
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Notes", in: managedContext)!
+        
+        let managedObject = NSManagedObject(entity: entity, insertInto: managedContext)
+        
+        managedObject.setValue(title, forKeyPath: "title")
+        managedObject.setValue(date, forKeyPath: "date")
+        
+        do {
+            try managedContext.save()
+            objects.append(managedObject)
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+        
+        printCoreData()
+    }
+    
+    //print core data entities
+    func printCoreData() {
+        for object in objects as! [Notes] {
+            print("\(object.title as Any), \(object.date as Any)")
+        }
+    }
 
 }
 

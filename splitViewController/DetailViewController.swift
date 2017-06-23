@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class DetailViewController: UIViewController {
 
     @IBOutlet weak var textView: UITextView!
     
     var masterRow: String?
-    var detailItem: String?
+    var detailItem: NSManagedObject?
     let userDefault = UserDefaults.standard
 
     /*func configureView() {
@@ -29,7 +30,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.title = detailItem
+        self.title = String(describing: detailItem?.entity.name)
     }
     
     override func viewWillAppear(_ animated: Bool) {
