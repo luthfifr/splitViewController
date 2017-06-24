@@ -45,8 +45,6 @@ class DetailViewController: UIViewController {
         super.viewWillDisappear(true)
         
         saveContent(content: textView.text!)
-        //userDefault.set(textView.text, forKey: masterRow!)
-        //userDefault.synchronize()
     }
 
     override func didReceiveMemoryWarning() {

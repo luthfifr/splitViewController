@@ -60,7 +60,7 @@ class MasterViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     func insertNewObject(_ sender: Any) {
         let alertJudul = UIAlertController (title: "Masukkan Judul Catatan", message: "Masukkan judul catatan untuk mempermudah pengorganisasian catatan.", preferredStyle: UIAlertControllerStyle.alert)
         alertJudul.addTextField(configurationHandler: { textfield in
@@ -98,6 +98,7 @@ class MasterViewController: UITableViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
+            print("showDetail executed")
             if let indexPath = tableView.indexPathForSelectedRow {
                 let object = objects[indexPath.row] 
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
