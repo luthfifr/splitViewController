@@ -16,7 +16,6 @@ class DetailViewController: UIViewController {
     var objects = [NSManagedObject]()
     var indexObject: Int?
     var detailItem: NSManagedObject?
-    let userDefault = UserDefaults.standard
 
     /*func configureView() {
         // Update the user interface for the detail item.
