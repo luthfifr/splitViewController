@@ -102,6 +102,7 @@ class MasterViewController: UITableViewController {
                 let object = objects[indexPath.row] 
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
+                controller.indexObject = indexPath.row
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -182,7 +183,7 @@ class MasterViewController: UITableViewController {
     //save to core data
     func saveTitle(title: String, date: String) {
         
-        let content = " "
+        let content = ""
         
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {

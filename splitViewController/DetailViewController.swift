@@ -14,6 +14,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     
     var objects = [NSManagedObject]()
+    var indexObject: Int?
     var detailItem: NSManagedObject?
     let userDefault = UserDefaults.standard
 
@@ -30,17 +31,32 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.title = ((detailItem?.value(forKeyPath: "title"))! as! String)
+        self.title = (detailItem?.value(forKeyPath: "title"))! as? String
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        if let item = detailItem as? [Notes] {
-            textView.text = item[item.count-1].content!
-        }
+        textView.text = (detailItem?.value(forKeyPath: "content"))! as! String
         
-        //fetch from core data
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        
+        saveContent(content: textView.text!)
+        //userDefault.set(textView.text, forKey: masterRow!)
+        //userDefault.synchronize()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    //update core data entity's value
+    func saveContent(content: String) {
+        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
@@ -50,26 +66,23 @@ class DetailViewController: UIViewController {
         let fetchRequest = NSFetchRequest<NSManagedObject> (entityName: "Notes")
         
         do {
-            objects = try managedContext.fetch(fetchRequest)
-            
+            let object = try managedContext.fetch(fetchRequest)
+            let managedObject = object[indexObject!] as NSManagedObject
+            managedObject.setValue(content, forKeyPath: "content")
+            try managedContext.save()
         } catch let error as NSError {
-            print("Could not fetch from Core Data. \(error), \(error.userInfo)")
+            print("Could not update attribute. \(error), \(error.userInfo)")
         }
         
+        printCoreData()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-        
-        //userDefault.set(textView.text, forKey: masterRow!)
-        //userDefault.synchronize()
+    //print core data entities
+    func printCoreData() {
+        for object in objects as! [Notes] {
+            print("\(object.title as Any), \(object.date as Any), \(object.content as Any)")
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 
