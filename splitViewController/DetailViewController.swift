@@ -50,7 +50,11 @@ class DetailViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         
-        saveContent(content: textView.text!)
+        if !textView.text.isEmpty &&  indexObject != nil {
+            saveContent(content: textView.text!)
+        } else {
+            print("can not save textView data because either textView is empty or the indexObject is empty")
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,7 +75,7 @@ class DetailViewController: UIViewController {
         
         do {
             let object = try managedContext.fetch(fetchRequest)
-            let managedObject = object[indexObject!] as NSManagedObject
+            let managedObject = object[indexObject!] as NSManagedObject //indexObject bikin ngecrash
             managedObject.setValue(content, forKeyPath: "content")
             try managedContext.save()
         } catch let error as NSError {

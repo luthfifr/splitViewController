@@ -141,6 +141,11 @@ class MasterViewController: UITableViewController {
         
         return cell
     }
+    
+    /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("row \(indexPath.row) is selected")
+        performSegue(withIdentifier: "showDetail", sender: self)
+    }*/
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
