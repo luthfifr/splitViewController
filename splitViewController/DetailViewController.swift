@@ -30,14 +30,21 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.title = (detailItem?.value(forKeyPath: "title"))! as? String
+        if (detailItem?.value(forKeyPath: "title")) != nil {
+            self.title = (detailItem?.value(forKeyPath: "title"))! as? String
+        } else {
+            self.title = ""
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        textView.text = (detailItem?.value(forKeyPath: "content"))! as! String
-        
+        if (detailItem?.value(forKeyPath: "content")) != nil {
+            textView.text = (detailItem?.value(forKeyPath: "content"))! as! String
+        }  else {
+            textView.text = ""
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
