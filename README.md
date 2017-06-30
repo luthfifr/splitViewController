@@ -22,3 +22,7 @@ iPad Potrait:
 iPad Landscape:
 
 ![](http://luthfifr.com/buku_ios_101/gif/splitViewController/splitViewController_iPad_Landscape.gif)
+
+CoreData framework is added to this project:
+
+![](http://luthfifr.com/buku_ios_101/gif/splitViewController/splitViewController_coreData.gif)
