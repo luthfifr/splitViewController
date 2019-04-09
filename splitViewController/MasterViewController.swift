@@ -61,13 +61,13 @@ class MasterViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func insertNewObject(_ sender: Any) {
-        let alertJudul = UIAlertController (title: "Masukkan Judul Catatan", message: "Masukkan judul catatan untuk mempermudah pengorganisasian catatan.", preferredStyle: UIAlertControllerStyle.alert)
+    @objc func insertNewObject(_ sender: Any) {
+        let alertJudul = UIAlertController (title: "Masukkan Judul Catatan", message: "Masukkan judul catatan untuk mempermudah pengorganisasian catatan.", preferredStyle: UIAlertController.Style.alert)
         alertJudul.addTextField(configurationHandler: { textfield in
             textfield.placeholder = "Judul catatan"
-            NotificationCenter.default.addObserver(self, selector: #selector(self.alertTextFieldHasChanged), name: NSNotification.Name.UITextFieldTextDidChange, object: textfield)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.alertTextFieldHasChanged), name: UITextField.textDidChangeNotification, object: textfield)
         })
-        self.buatCatatan = UIAlertAction(title: "Buat Catatan", style: UIAlertActionStyle.default,handler: { (action) in
+        self.buatCatatan = UIAlertAction(title: "Buat Catatan", style: UIAlertAction.Style.default,handler: { (action) in
             let textfield: UITextField = (alertJudul.textFields?.first!)!
             let date = Date()
             let calendar = Calendar.current
@@ -85,11 +85,11 @@ class MasterViewController: UITableViewController {
         })
         self.buatCatatan.isEnabled = false
         alertJudul.addAction(buatCatatan)
-        alertJudul.addAction(UIAlertAction(title: "Batalkan", style: UIAlertActionStyle.destructive,handler:nil))
+        alertJudul.addAction(UIAlertAction(title: "Batalkan", style: UIAlertAction.Style.destructive,handler:nil))
         self.present(alertJudul, animated: true, completion: nil)
     }
     
-    func alertTextFieldHasChanged(notification: Notification){
+    @objc func alertTextFieldHasChanged(notification: Notification){
         let textfield = notification.object as! UITextField
         self.buatCatatan.isEnabled = !(textfield.text?.isEmpty)!
     }
@@ -152,7 +152,7 @@ class MasterViewController: UITableViewController {
         return true
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             //delete a core data object
